@@ -87,12 +87,8 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: white;
+  height: 100vh;
 }
 
 a {
@@ -104,4 +100,30 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+.center-container {
+  height: 100%;
+  position: relative;
+}
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  align-items: center;
+  text-align: center;
+}
+
+.header {
+  box-shadow: 0 -5px 15px #003;
+  background-color: #fff;
+  height: 10vh;
+}
+
+.footer {
+  height: 10vh;
+  background-color:#dae2f4;
 }
