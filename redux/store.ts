@@ -3,7 +3,6 @@ import authReducer from "./features/auth-slice";
 import { combineReducers } from "redux";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
-import thunk from "redux-thunk";
 
 const rootReducer = combineReducers({
   authReducer,

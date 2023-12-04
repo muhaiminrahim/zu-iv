@@ -1,7 +1,7 @@
 "use client";
 import { signIn } from "@/firebase/initFirebase";
-import { LogInPayload, onLogIn, onLogOut } from "../redux/features/auth-slice";
-import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
+import { LogInPayload, onLogIn } from "../redux/features/auth-slice";
+import { useDispatch } from "react-redux";
 import { store } from "@/redux/store";
 import { useRouter } from "next/navigation";
 
