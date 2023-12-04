@@ -7,12 +7,6 @@ import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
-  const useThisSelector: TypedUseSelectorHook<
-    ReturnType<typeof store.getState>
-  > = useSelector;
-  const isAuth = useThisSelector((state) => state.authReducer.value.isAuth);
-  const email = useThisSelector((state) => state.authReducer.value.email);
-
   const dispatch = useDispatch<typeof store.dispatch>();
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

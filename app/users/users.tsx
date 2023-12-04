@@ -1,49 +1,77 @@
 "use client";
-import { useSelector, TypedUseSelectorHook } from "react-redux";
+import { useSelector, TypedUseSelectorHook, useDispatch } from "react-redux";
 import { store } from "@/redux/store";
 import { useRouter } from "next/navigation";
-
-type userData = {
-  avatar: string;
-  email: string;
-  first_name: string;
-  id: Number;
-  last_name: string;
-};
+import { userData } from "../types/types";
+import { useEffect, useState } from "react";
+import { onLogOut } from "@/redux/features/auth-slice";
 
 type UsersProp = {
   data: userData[];
 };
-const Users: React.FC<UsersProp> = (props) => {
-  const data = props.data;
+const Users: React.FC<UsersProp> = ({ data }) => {
+  const [isMasked, setIsMasked] = useState(true);
+  const [isLogOut, setIsLogOut] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch<typeof store.dispatch>();
+  const logOut = () => {
+    setIsLogOut(true);
+    dispatch(onLogOut());
+    router.push("/");
+    return;
+  };
+
   const useThisSelector: TypedUseSelectorHook<
     ReturnType<typeof store.getState>
   > = useSelector;
-  const email = useThisSelector((state) => state.authReducer.value.email);
   const isAuth = useThisSelector((state) => state.authReducer.value.isAuth);
-  if (!isAuth) {
-    router.push("/error");
-    return null;
-  }
 
-  return (
+  useEffect(() => {
+    if (!isAuth && !isLogOut) {
+      router.push("/error");
+    }
+  }, [isAuth, router, isLogOut]);
+
+  const maskEmail = (email: string) =>
+    email
+      .split("")
+      .map(() => "*")
+      .join("");
+
+  return isAuth ? (
     <>
-      <h1>Users Page</h1>
-      <p>Email: {email}</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          minWidth: "15vw",
+        }}
+      >
+        <h1 style={{ marginBottom: "25px" }}>Users Page</h1>
+        <button style={{ maxHeight: "34px" }} onClick={logOut}>
+          Logout
+        </button>
+      </div>
       {data.map((user, index) => {
         if (user.first_name.startsWith("G") || user.last_name.startsWith("W")) {
           return (
-            <h5 key={index}>
-              {user.first_name} - {user.last_name}
-            </h5>
+            <h3 key={index}>
+              {user.first_name} - {user.last_name} -{" "}
+              {isMasked ? maskEmail(user.email) : user.email}
+            </h3>
           );
         } else {
           return null;
         }
       })}
+      <button
+        style={{ marginTop: "5px" }}
+        onClick={() => setIsMasked(!isMasked)}
+      >
+        {isMasked ? "Display Email" : "Mask Email"}
+      </button>
     </>
-  );
+  ) : null;
 };
 
 export default Users;
