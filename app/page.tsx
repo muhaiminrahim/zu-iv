@@ -1,31 +1,33 @@
 "use client";
 import { signIn } from "@/firebase/initFirebase";
-import { LogInPayload, onLogIn } from "../redux/features/auth-slice";
+import { onLogIn } from "../redux/features/auth-slice";
 import { useDispatch } from "react-redux";
-import { store } from "@/redux/store";
+import { Dispatch } from "@/redux/store";
 import { useRouter } from "next/navigation";
+import { LogInPayload } from "./types/types";
 
 export default function LoginPage() {
   const router = useRouter();
-  const dispatch = useDispatch<typeof store.dispatch>();
+  const dispatch = useDispatch<Dispatch>();
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await signIn();
-    if (
-      response.user === null ||
-      response.user.email === null ||
-      response.user.uid === null
-    ) {
+
+    const { user } = await signIn();
+
+    if (!user || !user.email || !user.uid) {
       alert("Error");
       return;
     }
+
     const logInPayload: LogInPayload = {
-      email: response.user.email,
-      uid: response.user.uid,
+      email: user.email,
+      uid: user.uid,
     };
+
     dispatch(onLogIn(logInPayload));
     router.push("/users");
   };
+
   return (
     <div className="center-container">
       <div className="center">

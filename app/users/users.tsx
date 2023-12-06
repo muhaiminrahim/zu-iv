@@ -1,6 +1,6 @@
 "use client";
 import { useSelector, TypedUseSelectorHook, useDispatch } from "react-redux";
-import { store } from "@/redux/store";
+import { Dispatch, State } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import { userData } from "../types/types";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ const Users: React.FC<UsersProp> = ({ data }) => {
   const [isMasked, setIsMasked] = useState(true);
   const [isLogOut, setIsLogOut] = useState(false);
   const router = useRouter();
-  const dispatch = useDispatch<typeof store.dispatch>();
+  const dispatch = useDispatch<Dispatch>();
   const logOut = () => {
     setIsLogOut(true);
     dispatch(onLogOut());
@@ -21,9 +21,7 @@ const Users: React.FC<UsersProp> = ({ data }) => {
     return;
   };
 
-  const useThisSelector: TypedUseSelectorHook<
-    ReturnType<typeof store.getState>
-  > = useSelector;
+  const useThisSelector: TypedUseSelectorHook<State> = useSelector;
   const isAuth = useThisSelector((state) => state.authReducer.value.isAuth);
 
   useEffect(() => {
